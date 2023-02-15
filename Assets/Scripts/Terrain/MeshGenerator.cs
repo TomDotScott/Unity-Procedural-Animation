@@ -4,7 +4,7 @@ using UnityEngine;
 [CustomEditor(typeof(TerrainMeshData))]
 public class MeshGenerator : Editor
 {
-    TerrainMeshData m_terrainMeshData;
+    private TerrainMeshData m_terrainMeshData;
 
     void GenerateMesh()
     {
@@ -70,5 +70,9 @@ public class MeshGenerator : Editor
         {
             GenerateMesh();
         }
+
+        Texture2D texture = AssetPreview.GetAssetPreview(m_terrainMeshData.Heightmap);
+        GUILayout.Label("", GUILayout.Height(80), GUILayout.Width(80));
+        GUI.DrawTexture(GUILayoutUtility.GetLastRect(), texture);
     }
 }

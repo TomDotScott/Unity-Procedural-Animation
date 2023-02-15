@@ -5,6 +5,7 @@ using UnityEngine;
 
 class TerrainMeshData : MonoBehaviour
 {
+    public Texture2D Heightmap;
     [SerializeField] private int m_meshResolution;
     [SerializeField] private float m_width;
 

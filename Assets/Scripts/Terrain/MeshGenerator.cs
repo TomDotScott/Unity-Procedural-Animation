@@ -57,6 +57,7 @@ public class MeshGenerator : Editor
         mesh.vertices = vertices;
         mesh.triangles = triangles;
         mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
     }
 
     public override void OnInspectorGUI()

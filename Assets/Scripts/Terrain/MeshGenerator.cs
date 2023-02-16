@@ -42,7 +42,7 @@ public class MeshGenerator : Editor
 
                 vertices[x * resolution + y] = new Vector3(
                     meshAspect * x,
-                    averageValue,
+                    averageValue * m_terrainMeshData.GetScale(),
                     meshAspect * y
                 );
             }

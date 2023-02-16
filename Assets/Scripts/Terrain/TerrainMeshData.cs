@@ -7,6 +7,7 @@ class TerrainMeshData : MonoBehaviour
 {
     public Texture2D Heightmap;
     [SerializeField] private int m_meshResolution;
+    [SerializeField] private float m_heightmapScale;
     [SerializeField] private float m_width;
 
     public int GetResolution()
@@ -17,5 +18,10 @@ class TerrainMeshData : MonoBehaviour
     public float GetWidth()
     {
         return m_width;
+    }
+
+    public float GetScale()
+    {
+        return m_heightmapScale;
     }
 }

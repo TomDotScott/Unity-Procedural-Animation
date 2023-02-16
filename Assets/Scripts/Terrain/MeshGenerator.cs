@@ -10,54 +10,49 @@ public class MeshGenerator : Editor
     {
         Mesh mesh = m_terrainMeshData.GetComponent<MeshFilter>().sharedMesh;
 
-        int resolution = m_terrainMeshData.GetResolution();
-        float width = m_terrainMeshData.GetWidth();
+        mesh.vertices = GenerateVertices(m_terrainMeshData.GetResolution(), m_terrainMeshData.GetWidth());
+        mesh.triangles = GenerateTriangles(m_terrainMeshData.GetResolution());
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+    }
 
-        Vector3[] vertices = new Vector3[resolution * resolution];
-
-        // Grab the heightmap data
-        Texture2D heightmap = m_terrainMeshData.Heightmap;
+    private Vector3[] GenerateVertices(int meshResolution, float meshWidth)
+    {
+        Vector3[] vertices = new Vector3[meshResolution * meshResolution];
 
         // res-1 because we start counting at 0!
         // Caching aspect here because we don't wanna be calculating it 
         // max 65,536 times! 
-        float meshAspect = width / (resolution - 1);
+        float meshAspect = meshWidth / (meshResolution - 1);
 
-        // Find out how many pixels per vertex
-        int heightmapAspect = heightmap.width / (resolution - 1);
-
-        for (int y = 0; y < resolution; y++)
+        for (int y = 0; y < meshResolution; y++)
         {
-            for (int x = 0; x < resolution; x++)
+            for (int x = 0; x < meshResolution; x++)
             {
-                // Calculate the average height value for the vertex
-                float averageValue = 0f;
-                for (int i = 0; i < heightmapAspect; i++)
-                {
-                    // Grab the pixel value at the x->x+4
-                    averageValue += heightmap.GetPixel(x + i, y).grayscale;
-                }
-
-                averageValue /= heightmapAspect;
-
-                vertices[x * resolution + y] = new Vector3(
+                vertices[x * meshResolution + y] = new Vector3(
                     meshAspect * x,
-                    averageValue * m_terrainMeshData.GetScale(),
+                    GenerateHeightValue(x, y, meshResolution) * m_terrainMeshData.GetScale(),
                     meshAspect * y
                 );
             }
         }
 
-        int[] triangles = new int[(resolution - 1) * (resolution - 1) * 6];
+        return vertices;
+    }
+
+    private int[] GenerateTriangles(int meshResolution)
+    {
+        int[] triangles = new int[(meshResolution - 1) * (meshResolution - 1) * 6];
+
         int index = 0;
-        for (int y = 0; y < resolution - 1; y++)
+        for (int y = 0; y < meshResolution - 1; y++)
         {
-            for (int x = 0; x < resolution - 1; x++)
+            for (int x = 0; x < meshResolution - 1; x++)
             {
-                int i0 = y * resolution + x;
-                int i1 = y * resolution + x + 1;
-                int i2 = (y + 1) * resolution + x;
-                int i3 = (y + 1) * resolution + x + 1;
+                int i0 = y * meshResolution + x;
+                int i1 = y * meshResolution + x + 1;
+                int i2 = (y + 1) * meshResolution + x;
+                int i3 = (y + 1) * meshResolution + x + 1;
 
                 // Counter-Clockwise triangle indices
                 triangles[index++] = i0;
@@ -70,10 +65,26 @@ public class MeshGenerator : Editor
             }
         }
 
-        mesh.vertices = vertices;
-        mesh.triangles = triangles;
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
+        return triangles;
+    }
+
+    private float GenerateHeightValue(int xPos, int yPos, int meshResolution)
+    {
+        // Grab the heightmap data
+        Texture2D heightmap = m_terrainMeshData.Heightmap;
+
+        // Find out how many pixels per vertex
+        int heightmapAspect = heightmap.width / (meshResolution - 1);
+
+        // Calculate the average height value for the vertex
+        float averageValue = 0f;
+        for (int i = 0; i < heightmapAspect; i++)
+        {
+            // Grab the pixel value at the x->x+4
+            averageValue += heightmap.GetPixel(xPos + i, yPos).grayscale;
+        }
+
+        return averageValue / heightmapAspect;
     }
 
     public override void OnInspectorGUI()

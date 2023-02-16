@@ -111,7 +111,7 @@ public class MeshGenerator : Editor
 
         m_terrainMeshData = (TerrainMeshData)target;
 
-        if (GUILayout.Button("Generate Terrain Mesh"))
+        if (GUILayout.Button("Generate Terrain Mesh") || GUI.changed)
         {
             GenerateMesh();
         }

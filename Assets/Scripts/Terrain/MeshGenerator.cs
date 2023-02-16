@@ -15,19 +15,35 @@ public class MeshGenerator : Editor
 
         Vector3[] vertices = new Vector3[resolution * resolution];
 
+        // Grab the heightmap data
+        Texture2D heightmap = m_terrainMeshData.Heightmap;
+
         // res-1 because we start counting at 0!
         // Caching aspect here because we don't wanna be calculating it 
         // max 65,536 times! 
-        float aspect = width / (resolution - 1);
+        float meshAspect = width / (resolution - 1);
+
+        // Find out how many pixels per vertex
+        int heightmapAspect = heightmap.width / (resolution - 1);
 
         for (int y = 0; y < resolution; y++)
         {
             for (int x = 0; x < resolution; x++)
             {
+                // Calculate the average height value for the vertex
+                float averageValue = 0f;
+                for (int i = 0; i < heightmapAspect; i++)
+                {
+                    // Grab the pixel value at the x->x+4
+                    averageValue += heightmap.GetPixel(x + i, y).grayscale;
+                }
+
+                averageValue /= heightmapAspect;
+
                 vertices[x * resolution + y] = new Vector3(
-                    aspect * x,
-                    0,
-                    aspect * y
+                    meshAspect * x,
+                    averageValue,
+                    meshAspect * y
                 );
             }
         }

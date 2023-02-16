@@ -12,8 +12,11 @@ public class MeshGenerator : Editor
 
         mesh.vertices = GenerateVertices(m_terrainMeshData.GetResolution(), m_terrainMeshData.GetWidth());
         mesh.triangles = GenerateTriangles(m_terrainMeshData.GetResolution());
+        mesh.uv = GenerateUVs(m_terrainMeshData.GetResolution());
+
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
+        mesh.RecalculateTangents();
     }
 
     private Vector3[] GenerateVertices(int meshResolution, float meshWidth)
@@ -21,7 +24,7 @@ public class MeshGenerator : Editor
         Vector3[] vertices = new Vector3[meshResolution * meshResolution];
 
         // res-1 because we start counting at 0!
-        // Caching aspect here because we don't wanna be calculating it 
+        // Caching aspect here because we don't wanna be calculating it
         // max 65,536 times! 
         float meshAspect = meshWidth / (meshResolution - 1);
 
@@ -66,6 +69,21 @@ public class MeshGenerator : Editor
         }
 
         return triangles;
+    }
+
+    private Vector2[] GenerateUVs(int meshResolution)
+    {
+        Vector2[] uvs = new Vector2[meshResolution * meshResolution];
+
+        for (int y = 0; y < meshResolution; y++)
+        {
+            for (int x = 0; x < meshResolution; x++)
+            {
+                uvs[y * meshResolution + x] = new Vector2((float)x / meshResolution, (float)y / meshResolution);
+            }
+        }
+
+        return uvs;
     }
 
     private float GenerateHeightValue(int xPos, int yPos, int meshResolution)

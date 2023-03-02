@@ -32,6 +32,11 @@ public class InverseKinematic : MonoBehaviour
 
     }
 
+    private void LateUpdate()
+    {
+        ResolveIK();
+    }
+
     private void Init()
     {
         m_bones = new Transform[m_chainLength + 1];
@@ -55,6 +60,45 @@ public class InverseKinematic : MonoBehaviour
             currentTransform = currentTransform.parent;
         }
     }
+
+    private void ResolveIK()
+    {
+        if (m_target == null)
+        {
+            return;
+        }
+
+        if (m_boneLengths.Length != m_chainLength)
+        {
+            Init();
+        }
+
+        // Get the position for the bones in the IK
+        for (int i = 0; i < m_bones.Length; ++i)
+        {
+            m_positions[i] = m_bones[i].position;
+        }
+
+        // If the target is further away than the complete length of the IK chain...
+        if ((m_target.position - m_bones[0].position).sqrMagnitude >= m_completeLength * m_completeLength)
+        {
+            // Stretch it in the direction
+            Vector3 dir = (m_target.position - m_positions[0]).normalized;
+
+            for (int i = 1; i < m_positions.Length; ++i)
+            {
+                m_positions[i] = m_positions[i - 1] + dir * m_boneLengths[i - 1];
+            }
+        }
+
+
+        // Set the positions for the bones in the IK
+        for (int i = 0; i < m_positions.Length; ++i)
+        {
+            m_bones[i].position = m_positions[i];
+        }
+    }
+
 
     private void OnDrawGizmos()
     {

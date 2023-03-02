@@ -54,7 +54,7 @@ public class InverseKinematic : MonoBehaviour
             if (i != m_chainLength)
             {
                 m_boneLengths[i] = (m_bones[i + 1].position - currentTransform.position).magnitude;
-                m_completeLength *= m_boneLengths[i];
+                m_completeLength += m_boneLengths[i];
             }
 
             currentTransform = currentTransform.parent;
@@ -88,6 +88,35 @@ public class InverseKinematic : MonoBehaviour
             for (int i = 1; i < m_positions.Length; ++i)
             {
                 m_positions[i] = m_positions[i - 1] + dir * m_boneLengths[i - 1];
+            }
+        }
+        else
+        {
+            int iteration = 0;
+            while (iteration < m_iterations && (m_positions[^1] - m_target.position).sqrMagnitude > m_delta * m_delta)
+            {
+                // Propagate backwards
+                for (int i = m_positions.Length - 1; i > 0; --i)
+                {
+                    if (i == m_positions.Length - 1)
+                    {
+                        m_positions[i] = m_target.position;
+                    }
+                    else
+                    {
+                        Vector3 boneDirection = (m_positions[i] - m_positions[i + 1]).normalized * m_boneLengths[i];
+                        m_positions[i] = m_positions[i + 1] + boneDirection;
+                    }
+                }
+
+                // Propagate forwards
+                for (int i = 1; i < m_positions.Length; ++i)
+                {
+                    Vector3 boneDirection = (m_positions[i] - m_positions[i - 1]).normalized * m_boneLengths[i - 1];
+                    m_positions[i] = m_positions[i - 1] + boneDirection;
+                }
+
+                iteration++;
             }
         }
 

@@ -120,6 +120,25 @@ public class InverseKinematic : MonoBehaviour
             }
         }
 
+        // Move towards the pole
+        if (m_pole != null)
+        {
+            for (int i = 1; i < m_positions.Length - 1; ++i)
+            {
+                Plane plane = new Plane(m_positions[i + 1] - m_positions[i - 1], m_positions[i - 1]);
+                Vector3 projectedPole = plane.ClosestPointOnPlane(m_pole.position);
+                Vector3 projectedBone = plane.ClosestPointOnPlane(m_positions[i]);
+
+                float angle = Vector3.SignedAngle(
+                    projectedBone - m_positions[i - 1],
+                    projectedPole - m_positions[i - 1],
+                    plane.normal
+                );
+
+                m_positions[i] = Quaternion.AngleAxis(angle, plane.normal) * (m_positions[i] - m_positions[i - 1]) + m_positions[i - 1];
+            }
+        }
+
 
         // Set the positions for the bones in the IK
         for (int i = 0; i < m_positions.Length; ++i)

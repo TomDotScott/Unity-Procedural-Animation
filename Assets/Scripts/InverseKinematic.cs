@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using UnityEditor;
 using UnityEngine;
 
@@ -20,6 +21,11 @@ public class InverseKinematic : MonoBehaviour
     private float m_completeLength;
     private Transform[] m_bones;
     private Vector3[] m_positions;
+
+    private Vector3[] m_startDirectionSuccessors;
+    private Quaternion[] m_startRotationBones;
+    private Quaternion m_startRotationTarget;
+    private Quaternion m_startRotationRoot;
 
     private void Awake()
     {
@@ -43,6 +49,11 @@ public class InverseKinematic : MonoBehaviour
         m_positions = new Vector3[m_chainLength + 1];
         m_boneLengths = new float[m_chainLength];
 
+        m_startDirectionSuccessors = new Vector3[m_chainLength + 1];
+        m_startRotationBones = new Quaternion[m_chainLength + 1];
+
+
+        m_startRotationTarget = m_target.rotation;
         m_completeLength = 0f;
 
         // Calculate the lengths between the bones 
@@ -51,8 +62,17 @@ public class InverseKinematic : MonoBehaviour
         {
             m_bones[i] = currentTransform;
 
-            if (i != m_chainLength)
+            m_startRotationBones[i] = currentTransform.rotation;
+
+            if (i == m_chainLength)
             {
+                // We're at the root, so make it relative to the target
+                m_startDirectionSuccessors[i] = m_target.position - currentTransform.position;
+            }
+            else
+            {
+                // Mid-bone so calculate as normal...
+                m_startDirectionSuccessors[i] = m_bones[i + 1].position - currentTransform.position;
                 m_boneLengths[i] = (m_bones[i + 1].position - currentTransform.position).magnitude;
                 m_completeLength += m_boneLengths[i];
             }
@@ -78,6 +98,14 @@ public class InverseKinematic : MonoBehaviour
         {
             m_positions[i] = m_bones[i].position;
         }
+
+        Quaternion rootRotation = Quaternion.identity;
+        if (m_bones[0] != null)
+        {
+            rootRotation = m_bones[0].rotation;
+        }
+
+        Quaternion rootRotationDifference = rootRotation * Quaternion.Inverse(m_startRotationRoot);
 
         // If the target is further away than the complete length of the IK chain...
         if ((m_target.position - m_bones[0].position).sqrMagnitude >= m_completeLength * m_completeLength)
@@ -140,9 +168,18 @@ public class InverseKinematic : MonoBehaviour
         }
 
 
-        // Set the positions for the bones in the IK
+        // Set the position and rotation for the bones in the IK
         for (int i = 0; i < m_positions.Length; ++i)
         {
+            if (i == m_positions.Length - 1)
+            {
+                m_bones[i].rotation = m_target.rotation * Quaternion.Inverse(m_startRotationTarget) * m_startRotationBones[i];
+            }
+            else
+            {
+                m_bones[i].rotation = Quaternion.FromToRotation(m_startDirectionSuccessors[i], m_positions[i + 1] - m_positions[i]) * m_startRotationBones[i];
+            }
+
             m_bones[i].position = m_positions[i];
         }
     }

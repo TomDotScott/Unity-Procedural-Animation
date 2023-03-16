@@ -1386,6 +1386,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_eyeTarget: {fileID: 1015265727}
   m_headBone: {fileID: 751792513}
+  m_headTurnSpeed: 700
 --- !u!4 &751792513 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7438037816406606488, guid: 786de34bcf3bc90469232d3f16f79f9a, type: 3}

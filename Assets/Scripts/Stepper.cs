@@ -56,6 +56,7 @@ public class Stepper : MonoBehaviour
         {
             timeElapsed += Time.deltaTime;
 
+            float normalisedTime = Easing.EaseInOutCubic(timeElapsed / m_stepDuration);
 
             // Use a quadratic bezier curve to move the foot to make it look convincing
             transform.position = Vector3.Lerp(
@@ -70,15 +71,5 @@ public class Stepper : MonoBehaviour
         }
 
         Moving = false;
-    }
-
-    public static float EaseInOutCubic(float k)
-    {
-        if ((k *= 2f) < 1f)
-        {
-            return 0.5f * k * k * k;
-        }
-
-        return 0.5f * ((k -= 2f) * k * k + 2f);
     }
 }

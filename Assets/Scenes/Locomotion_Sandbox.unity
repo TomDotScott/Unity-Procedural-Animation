@@ -242,7 +242,7 @@ Transform:
   - {fileID: 397936270}
   - {fileID: 7897725}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &74595188
 MonoBehaviour:
@@ -302,7 +302,7 @@ GameObject:
   m_Layer: 0
   m_Name: Dog_Front_Left_foot_Target
   m_TagString: Untagged
-  m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -319,7 +319,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &171869764
 MonoBehaviour:
@@ -337,7 +337,6 @@ MonoBehaviour:
   m_stepDistance: 0.2
   m_stepDuration: 0.4
   m_stepOvershoot: 1
-  m_centreHeightDenominator: 0.75
 --- !u!1 &256095559
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,7 +550,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &501682944
 GameObject:
@@ -870,7 +869,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 786de34bcf3bc90469232d3f16f79f9a, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 786de34bcf3bc90469232d3f16f79f9a, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1658,6 +1657,17 @@ MonoBehaviour:
   m_maxLeftEyeAngle: -60
   m_minRightEyeAngle: -110
   m_maxRightEyeAngle: 10
+  m_turnSpeed: 100
+  m_moveSpeed: 2
+  m_turnAcceleration: 5
+  m_moveAcceleration: 5
+  m_minimumDistanceToTarget: 4.5
+  m_maxDistToTarget: 6
+  m_maxAngleToTarget: 25
+  m_frontLeftStepper: {fileID: 171869764}
+  m_frontRightStepper: {fileID: 1579528408}
+  m_backLeftStepper: {fileID: 2000840231}
+  m_backRightStepper: {fileID: 2135060690}
 --- !u!4 &751792513 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7438037816406606488, guid: 786de34bcf3bc90469232d3f16f79f9a, type: 3}
@@ -1878,7 +1888,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &900575399
 GameObject:
@@ -2108,7 +2118,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1181785596
 MonoBehaviour:
@@ -2348,7 +2358,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &1462154942 stripped
 GameObject:
@@ -2406,7 +2416,7 @@ Transform:
   - {fileID: 1248693427}
   - {fileID: 1550835997}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1491851179
 GameObject:
@@ -2774,7 +2784,7 @@ GameObject:
   m_Layer: 0
   m_Name: Dog_Front_Right_foot_Target
   m_TagString: Untagged
-  m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -2791,7 +2801,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1579528408
 MonoBehaviour:
@@ -2809,7 +2819,6 @@ MonoBehaviour:
   m_stepDistance: 0.2
   m_stepDuration: 0.4
   m_stepOvershoot: 1
-  m_centreHeightDenominator: 0.75
 --- !u!4 &1653162903 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0732ff98b020de843a9ed868e789b2eb, type: 3}
@@ -3143,7 +3152,7 @@ GameObject:
   m_Layer: 0
   m_Name: Dog_Back_Left_foot_Target
   m_TagString: Untagged
-  m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -3160,7 +3169,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2000840231
 MonoBehaviour:
@@ -3178,7 +3187,6 @@ MonoBehaviour:
   m_stepDistance: 0.2
   m_stepDuration: 0.4
   m_stepOvershoot: 1
-  m_centreHeightDenominator: 0.75
 --- !u!1 &2053772685
 GameObject:
   m_ObjectHideFlags: 0
@@ -3241,7 +3249,7 @@ Transform:
   - {fileID: 900575400}
   - {fileID: 1534343972}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2135060688
 GameObject:
@@ -3256,7 +3264,7 @@ GameObject:
   m_Layer: 0
   m_Name: Dog_Back_Right_foot_Target
   m_TagString: Untagged
-  m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 3443629218296621865, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -3273,7 +3281,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2135060690
 MonoBehaviour:
@@ -3291,4 +3299,64 @@ MonoBehaviour:
   m_stepDistance: 0.2
   m_stepDuration: 0.4
   m_stepOvershoot: 1
-  m_centreHeightDenominator: 0.75
+--- !u!1001 &8500698555141458015
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2708991663343933481, guid: a5acac4cfc1fa7f42b9819b27b0c6d34, type: 3}
+      propertyPath: m_Name
+      value: Doggo
+      objectReference: {fileID: 0}
+    - target: {fileID: 2708991663343933482, guid: a5acac4cfc1fa7f42b9819b27b0c6d34, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2708991663343933482, guid: a5acac4cfc1fa7f42b9819b27b0c6d34, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 2708991663343933482, guid: a5acac4cfc1fa7f42b9819b27b0c6d34, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.53
+      objectReference: {fileID: 0}
+    - target: {fileID: 2708991663343933482, guid: a5acac4cfc1fa7f42b9819b27b0c6d34, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.94
+      objectReference: {fileID: 0}
+    - target: {fileID: 2708991663343933482, guid: a5acac4cfc1fa7f42b9819b27b0c6d34, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2708991663343933482, guid: a5acac4cfc1fa7f42b9819b27b0c6d34, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2708991663343933482, guid: a5acac4cfc1fa7f42b9819b27b0c6d34, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2708991663343933482, guid: a5acac4cfc1fa7f42b9819b27b0c6d34, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2708991663343933482, guid: a5acac4cfc1fa7f42b9819b27b0c6d34, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2708991663343933482, guid: a5acac4cfc1fa7f42b9819b27b0c6d34, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2708991663343933482, guid: a5acac4cfc1fa7f42b9819b27b0c6d34, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8500698556363401415, guid: a5acac4cfc1fa7f42b9819b27b0c6d34, type: 3}
+      propertyPath: m_eyeTarget
+      value: 
+      objectReference: {fileID: 1015265727}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a5acac4cfc1fa7f42b9819b27b0c6d34, type: 3}

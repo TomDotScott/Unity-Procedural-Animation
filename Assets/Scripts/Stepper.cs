@@ -9,7 +9,6 @@ public class Stepper : MonoBehaviour
     [SerializeField] private float m_stepDistance;
     [SerializeField] private float m_stepDuration;
     [SerializeField] private float m_stepOvershoot;
-    [SerializeField] private float m_centreHeightDenominator;
 
     public bool Moving { get; private set; }
 
@@ -45,11 +44,11 @@ public class Stepper : MonoBehaviour
 
         overshootVector = Vector3.ProjectOnPlane(overshootVector, Vector3.up);
 
-        Vector3 endPosition = m_home.transform.position + overshootVector;
+        Vector3 endPosition = m_home.position + overshootVector;
 
         Vector3 centrePosition = (startPosition + endPosition) / 2;
 
-        centrePosition += m_home.transform.up * Vector3.Distance(startPosition, endPosition) / m_centreHeightDenominator;
+        centrePosition += m_home.up * Vector3.Distance(startPosition, endPosition) / 2f;
 
         float timeElapsed = 0f;
 
@@ -57,7 +56,6 @@ public class Stepper : MonoBehaviour
         {
             timeElapsed += Time.deltaTime;
 
-            float normalisedTime = EaseInOutCubic(timeElapsed / m_stepDuration);
 
             // Use a quadratic bezier curve to move the foot to make it look convincing
             transform.position = Vector3.Lerp(

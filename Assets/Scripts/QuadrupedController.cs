@@ -21,6 +21,18 @@ public class QuadrupedController : MonoBehaviour
     [SerializeField] private float m_minRightEyeAngle;
     [SerializeField] private float m_maxRightEyeAngle;
 
+    [SerializeField] float m_turnSpeed;
+    [SerializeField] float m_moveSpeed;
+    [SerializeField] float m_turnAcceleration;
+    [SerializeField] float m_moveAcceleration;
+    [SerializeField] float m_minimumDistanceToTarget;
+    [SerializeField] float m_maxDistToTarget;
+    [SerializeField] float m_maxAngleToTarget;
+
+    Vector3 m_currentVelocity;
+    float m_currentAngularVelocity;
+
+
     [SerializeField] private Stepper m_frontLeftStepper;
     [SerializeField] private Stepper m_frontRightStepper;
     [SerializeField] private Stepper m_backLeftStepper;
@@ -33,6 +45,7 @@ public class QuadrupedController : MonoBehaviour
 
     private void LateUpdate()
     {
+        UpdateMotion();
         UpdateHeadTracking();
         UpdateEyeTracking();
     }
@@ -58,6 +71,7 @@ public class QuadrupedController : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(towardTargetLocalSpace, Vector3.up);
 
         // Smooth the rotation
+        m_headBone.localRotation = Quaternion.Slerp(
             currentRotation,
             targetRotation,
             1 - Mathf.Exp(-m_headTurnSpeed * Time.deltaTime)
@@ -122,6 +136,74 @@ public class QuadrupedController : MonoBehaviour
             rightEyeClampedYRotation,
             m_rightEye.localEulerAngles.z
         );
+    }
+
+    void UpdateMotion()
+    {
+        Vector3 towardTarget = m_eyeTarget.position - transform.position;
+
+        Vector3 towardTargetProjected = Vector3.ProjectOnPlane(towardTarget, transform.up);
+
+        float angleToTarget = Vector3.SignedAngle(transform.forward, towardTargetProjected, transform.up);
+
+        float targetAngularVelocity = 0;
+
+        // If we are within the max angle (i.e. facing the target) leave the target angular velocity at zero
+        if (Mathf.Abs(angleToTarget) > m_maxAngleToTarget)
+        {
+            // Angles in Unity are clockwise, so a positive angle here means to our right
+            if (angleToTarget > 0)
+            {
+                targetAngularVelocity = m_turnSpeed;
+            }
+            // Invert angular speed if target is to our left
+            else
+            {
+                targetAngularVelocity = -m_turnSpeed;
+            }
+        }
+
+        // Smooth the velocity over time
+        m_currentAngularVelocity = Mathf.Lerp(
+            m_currentAngularVelocity,
+            targetAngularVelocity,
+            1 - Mathf.Exp(-m_turnAcceleration * Time.deltaTime)
+        );
+
+        transform.Rotate(
+            0,
+            Time.deltaTime * m_currentAngularVelocity,
+            0,
+            Space.World
+        );
+
+        Vector3 targetVelocity = Vector3.zero;
+
+        // If we are facing opposite to the target, spin in place
+        if (Mathf.Abs(angleToTarget) < 90)
+        {
+            float distanceToTarget = Vector3.Distance(transform.position, m_eyeTarget.position);
+
+            // If we're too far away, approach the target
+            if (distanceToTarget > m_maxDistToTarget)
+            {
+                targetVelocity = m_moveSpeed * towardTargetProjected.normalized;
+            }
+            // If we're too close, reverse the direction and move away
+            else if (distanceToTarget < m_minimumDistanceToTarget)
+            {
+                targetVelocity = m_moveSpeed * -towardTargetProjected.normalized;
+            }
+        }
+
+        m_currentVelocity = Vector3.Lerp(
+            m_currentVelocity,
+            targetVelocity,
+            1 - Mathf.Exp(-m_moveAcceleration * Time.deltaTime)
+        );
+
+        // Apply the velocity
+        transform.position += m_currentVelocity * Time.deltaTime;
     }
 
     private IEnumerator UpdateLegMovement()

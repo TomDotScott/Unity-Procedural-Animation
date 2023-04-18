@@ -21,6 +21,16 @@ public class QuadrupedController : MonoBehaviour
     [SerializeField] private float m_minRightEyeAngle;
     [SerializeField] private float m_maxRightEyeAngle;
 
+    [SerializeField] private Stepper m_frontLeftStepper;
+    [SerializeField] private Stepper m_frontRightStepper;
+    [SerializeField] private Stepper m_backLeftStepper;
+    [SerializeField] private Stepper m_backRightStepper;
+
+    private void Awake()
+    {
+        StartCoroutine(UpdateLegMovement());
+    }
+
     private void LateUpdate()
     {
         UpdateHeadTracking();
@@ -40,7 +50,7 @@ public class QuadrupedController : MonoBehaviour
         // Apply the rotation limit to the head
         towardTargetLocalSpace = Vector3.RotateTowards(Vector3.forward, towardTargetLocalSpace, Mathf.Deg2Rad * m_maxHeadAngle, 0f);
 
-        Quaternion targetRotation = Quaternion.LookRotation(towardTargetLocalSpace, transform.up);
+        Quaternion targetRotation = Quaternion.LookRotation(towardTargetLocalSpace, Vector3.up);
 
         // Smooth the rotation
         m_headBone.rotation = Quaternion.Slerp(
@@ -52,15 +62,20 @@ public class QuadrupedController : MonoBehaviour
 
     private void UpdateEyeTracking()
     {
+        Quaternion targetEyeRotation = Quaternion.LookRotation(
+            m_eyeTarget.position - m_headBone.position, // toward target
+            transform.up
+        );
+
         m_leftEye.rotation = Quaternion.Slerp(
             m_leftEye.rotation,
-            Quaternion.LookRotation(m_eyeTarget.position - m_leftEye.position, transform.up),
+            targetEyeRotation,
             1 - Mathf.Exp(-m_eyeTurnSpeed * Time.deltaTime)
         );
 
         m_rightEye.rotation = Quaternion.Slerp(
             m_rightEye.rotation,
-            Quaternion.LookRotation(m_eyeTarget.position - m_leftEye.position, transform.up),
+            targetEyeRotation,
             1 - Mathf.Exp(-m_eyeTurnSpeed * Time.deltaTime)
         );
 
@@ -68,7 +83,7 @@ public class QuadrupedController : MonoBehaviour
         float leftEyeCurrentYRotation = m_leftEye.localEulerAngles.y;
         float rightEyeCurrentYRotation = m_rightEye.localEulerAngles.y;
 
-        // Move the rotation to a -180 ~ 180 range
+        // Move the rotation to a -180 -> 180 range
         if (leftEyeCurrentYRotation > 180)
         {
             leftEyeCurrentYRotation -= 360;
@@ -84,6 +99,7 @@ public class QuadrupedController : MonoBehaviour
             m_minLeftEyeAngle,
             m_maxLeftEyeAngle
         );
+
         float rightEyeClampedYRotation = Mathf.Clamp(
             rightEyeCurrentYRotation,
             m_minRightEyeAngle,
@@ -96,10 +112,34 @@ public class QuadrupedController : MonoBehaviour
             leftEyeClampedYRotation,
             m_leftEye.localEulerAngles.z
         );
+
         m_rightEye.localEulerAngles = new Vector3(
             m_rightEye.localEulerAngles.x,
             rightEyeClampedYRotation,
             m_rightEye.localEulerAngles.z
         );
+    }
+
+    private IEnumerator UpdateLegMovement()
+    {
+        while (true)
+        {
+            // Move the legs in diagonal pairs, to give the illusion of the quadruped walking correctly
+            do
+            {
+                m_frontLeftStepper.AttemptMove();
+                m_backRightStepper.AttemptMove();
+
+                yield return null; // waits a frame...
+            } while (m_backRightStepper.Moving || m_frontLeftStepper.Moving);
+
+            do
+            {
+                m_frontRightStepper.AttemptMove();
+                m_backLeftStepper.AttemptMove();
+
+                yield return null;
+            } while (m_backLeftStepper.Moving || !m_frontRightStepper.Moving);
+        }
     }
 }

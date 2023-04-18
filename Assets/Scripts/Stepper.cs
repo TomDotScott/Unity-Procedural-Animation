@@ -13,8 +13,7 @@ public class Stepper : MonoBehaviour
 
     public bool Moving { get; private set; }
 
-    // Update is called once per frame
-    void Update()
+    public void AttemptMove()
     {
         if (Moving)
         {

@@ -48,12 +48,16 @@ public class QuadrupedController : MonoBehaviour
         Vector3 towardTargetLocalSpace = m_headBone.InverseTransformDirection(towardTargetWorldSpace);
 
         // Apply the rotation limit to the head
-        towardTargetLocalSpace = Vector3.RotateTowards(Vector3.forward, towardTargetLocalSpace, Mathf.Deg2Rad * m_maxHeadAngle, 0f);
+        towardTargetLocalSpace = Vector3.RotateTowards(
+            Vector3.forward,
+            towardTargetLocalSpace,
+            Mathf.Deg2Rad * m_maxHeadAngle,
+            0
+        );
 
         Quaternion targetRotation = Quaternion.LookRotation(towardTargetLocalSpace, Vector3.up);
 
         // Smooth the rotation
-        m_headBone.rotation = Quaternion.Slerp(
             currentRotation,
             targetRotation,
             1 - Mathf.Exp(-m_headTurnSpeed * Time.deltaTime)

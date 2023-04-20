@@ -38,6 +38,8 @@ public class QuadrupedController : MonoBehaviour
     [SerializeField] private Stepper m_backLeftStepper;
     [SerializeField] private Stepper m_backRightStepper;
 
+    [SerializeField] private bool m_canMove;
+
     private void Awake()
     {
         StartCoroutine(UpdateLegMovement());
@@ -45,7 +47,11 @@ public class QuadrupedController : MonoBehaviour
 
     private void LateUpdate()
     {
-        UpdateMotion();
+        if (m_canMove)
+        {
+            UpdateMotion();
+        }
+
         UpdateHeadTracking();
         UpdateEyeTracking();
     }

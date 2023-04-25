@@ -1258,6 +1258,7 @@ MonoBehaviour:
   m_frontRightStepper: {fileID: 8500698556744581397}
   m_backLeftStepper: {fileID: 8500698555374046813}
   m_backRightStepper: {fileID: 8500698556027362078}
+  m_canMove: 0
 --- !u!1 &2984524675113467499
 GameObject:
   m_ObjectHideFlags: 0

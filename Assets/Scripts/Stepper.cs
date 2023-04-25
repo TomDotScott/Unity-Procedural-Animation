@@ -1,7 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements.Experimental;
 
 public class Stepper : MonoBehaviour
 {
@@ -19,7 +17,7 @@ public class Stepper : MonoBehaviour
             return;
         }
 
-        float distanceFromHome = Vector3.Distance(transform.position, m_home.position);
+        float distanceFromHome = Vector2.Distance(new Vector2(transform.position.x, transform.position.z), new Vector2(m_home.position.x, m_home.position.z));
 
         // If we are too far away, then we should step 
         if (distanceFromHome > m_stepDistance)

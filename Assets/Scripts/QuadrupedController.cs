@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class QuadrupedController : MonoBehaviour
@@ -231,7 +230,7 @@ public class QuadrupedController : MonoBehaviour
                 m_backLeftStepper.AttemptMove();
 
                 yield return null;
-            } while (m_backLeftStepper.Moving || !m_frontRightStepper.Moving);
+            } while (m_backLeftStepper.Moving || m_frontRightStepper.Moving);
         }
     }
 }

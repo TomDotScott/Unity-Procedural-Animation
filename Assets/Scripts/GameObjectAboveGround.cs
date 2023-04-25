@@ -64,6 +64,8 @@ public class GameObjectAboveGround : MonoBehaviour
 
             GroundCheck(foot.Stepper.transform, foot.MinDistanceToGround, out RaycastHit hit);
 
+            foot.Stepper.SetHomeRotation(hit.normal);
+
             foot.Stepper.transform.position = CalculateNewPosition(foot.Stepper.transform, foot.MinDistanceToGround, hit.distance);
         }
 

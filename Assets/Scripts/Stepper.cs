@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using static GameObjectAboveGround;
 
 public class Stepper : MonoBehaviour
 {
@@ -69,5 +70,10 @@ public class Stepper : MonoBehaviour
         }
 
         Moving = false;
+    }
+
+    public void SetHomeRotation(Vector3 groundNormal)
+    {
+        transform.rotation = Quaternion.FromToRotation(transform.up, groundNormal) * transform.rotation;
     }
 }

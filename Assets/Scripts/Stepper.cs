@@ -74,6 +74,18 @@ public class Stepper : MonoBehaviour
 
     public void SetHomeRotation(Vector3 groundNormal)
     {
-        transform.rotation = Quaternion.FromToRotation(transform.up, groundNormal) * transform.rotation;
+        Vector3 newUp = Vector3.Cross(transform.right, groundNormal);
+
+        // If the new "up" direction is zero, it means that the ground normal and right direction are parallel,
+        // so we can use the world space up direction instead
+        if (newUp == Vector3.zero)
+        {
+            newUp = Vector3.up;
+        }
+
+        transform.rotation = Quaternion.FromToRotation(transform.up, newUp) * transform.rotation;
+
+        // Compensate the X rotation by subbing 90
+        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x - 90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
     }
 }

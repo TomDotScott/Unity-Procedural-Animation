@@ -11,6 +11,13 @@ public class Stepper : MonoBehaviour
 
     public bool Moving { get; private set; }
 
+    private Quaternion m_initialRotation;
+
+    private void Start()
+    {
+        m_initialRotation = transform.rotation;
+    }
+
     public void AttemptMove()
     {
         if (Moving)
@@ -86,6 +93,6 @@ public class Stepper : MonoBehaviour
         transform.rotation = Quaternion.FromToRotation(transform.up, newUp) * transform.rotation;
 
         // Compensate the X rotation by subbing 90
-        transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x - 90, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z);
+        transform.Rotate(-90, 0, 0);
     }
 }

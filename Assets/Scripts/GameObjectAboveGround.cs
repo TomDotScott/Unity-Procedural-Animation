@@ -12,6 +12,8 @@ public class GameObjectAboveGround : MonoBehaviour
     [SerializeField] private float m_heightAdjustmentSpeed;
     [SerializeField] private float m_footOffset;
 
+    [SerializeField] private bool m_orientateBody = true;
+
     [System.Serializable]
     public class Foot
     {
@@ -32,23 +34,28 @@ public class GameObjectAboveGround : MonoBehaviour
         Physics.Raycast(m_front.position, Vector3.down, out RaycastHit frontHit, Mathf.Infinity);
         Physics.Raycast(m_back.position, Vector3.down, out RaycastHit backHit, Mathf.Infinity);
 
-        // Calculate the average normal of the two raycasts
-        Vector3 averageNormal = ((frontHit.normal + backHit.normal) * 0.5f).normalized;
+        if (m_orientateBody)
+        {
+            // Calculate the average normal of the two raycasts
+            Vector3 averageNormal = ((frontHit.normal + backHit.normal) * 0.5f).normalized;
 
-        Quaternion targetRotation = Quaternion.FromToRotation(transform.up, averageNormal) * transform.rotation;
+            Quaternion targetRotation = Quaternion.FromToRotation(transform.up, averageNormal) * transform.rotation;
 
-        // rotate towards the new rotation
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            targetRotation,
-            m_rotationSpeed * Time.deltaTime
-        );
+            // rotate towards the new rotation
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRotation,
+                m_rotationSpeed * Time.deltaTime
+            );
+        }
 
         transform.position = Vector3.Slerp(
-            transform.position,
-            CalculateNewPosition(transform, m_minimumDistanceToGround, Mathf.Max(frontHit.distance, backHit.distance)),
-            m_heightAdjustmentSpeed * Time.deltaTime
-        );
+                transform.position,
+                CalculateNewPosition(transform, m_minimumDistanceToGround,
+                    Mathf.Max(frontHit.distance, backHit.distance)),
+                m_heightAdjustmentSpeed * Time.deltaTime
+            );
+
 
         foreach (var foot in m_feet.Where(foot => !foot.Stepper.Moving))
         {

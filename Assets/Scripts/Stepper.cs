@@ -9,6 +9,8 @@ public class Stepper : MonoBehaviour
     [SerializeField] private float m_stepDuration;
     [SerializeField] private float m_stepOvershoot;
 
+    [SerializeField] private float m_stepHeight = 2f;
+
     public bool Moving { get; private set; }
 
     private Quaternion m_initialRotation;
@@ -54,7 +56,7 @@ public class Stepper : MonoBehaviour
 
         Vector3 centrePosition = (startPosition + endPosition) / 2;
 
-        centrePosition += m_home.up * Vector3.Distance(startPosition, endPosition) / 2f;
+        centrePosition += m_home.up * Vector3.Distance(startPosition, endPosition) / m_stepHeight;
 
         float timeElapsed = 0f;
 

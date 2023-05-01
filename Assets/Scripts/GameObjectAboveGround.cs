@@ -11,6 +11,7 @@ public class GameObjectAboveGround : MonoBehaviour
     [SerializeField] private float m_rotationSpeed;
     [SerializeField] private float m_heightAdjustmentSpeed;
     [SerializeField] private float m_footOffset;
+    [SerializeField] private LayerMask m_collidables;
 
     [SerializeField] private bool m_orientateBody = true;
 
@@ -31,8 +32,8 @@ public class GameObjectAboveGround : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Physics.Raycast(m_front.position, Vector3.down, out RaycastHit frontHit, Mathf.Infinity);
-        Physics.Raycast(m_back.position, Vector3.down, out RaycastHit backHit, Mathf.Infinity);
+        Physics.Raycast(m_front.position, Vector3.down, out RaycastHit frontHit, Mathf.Infinity, m_collidables);
+        Physics.Raycast(m_back.position, Vector3.down, out RaycastHit backHit, Mathf.Infinity, m_collidables);
 
         if (m_orientateBody)
         {
@@ -83,7 +84,7 @@ public class GameObjectAboveGround : MonoBehaviour
         // Move to be correct orientation relative to the ground
         Debug.DrawRay(inTransform.position, Vector3.down * minDistToGround, Color.yellow, 0.016f);
 
-        Physics.Raycast(inTransform.position, Vector3.down, out hit, Mathf.Infinity);
+        Physics.Raycast(inTransform.position, Vector3.down, out hit, Mathf.Infinity, m_collidables);
     }
 
     private Vector3 CalculateNewPosition(Transform inTransform, float minDistToGround, float distanceToGround)

@@ -1286,6 +1286,7 @@ GameObject:
   - component: {fileID: 2455302844206834873}
   - component: {fileID: 8500698556363401415}
   - component: {fileID: 6674792100831573597}
+  - component: {fileID: 1492777288}
   m_Layer: 0
   m_Name: dog_model
   m_TagString: Untagged
@@ -1333,18 +1334,10 @@ MonoBehaviour:
   m_maxLeftEyeAngle: 40
   m_minRightEyeAngle: -40
   m_maxRightEyeAngle: 40
-  m_turnSpeed: 60
-  m_moveSpeed: 2
-  m_turnAcceleration: 5
-  m_moveAcceleration: 0.5
-  m_minimumDistanceToTarget: 3
-  m_maxDistToTarget: 5.5
-  m_maxAngleToTarget: 10
   m_frontLeftStepper: {fileID: 8500698555410699345}
   m_frontRightStepper: {fileID: 8500698556744581397}
   m_backLeftStepper: {fileID: 8500698555374046813}
   m_backRightStepper: {fileID: 8500698556027362078}
-  m_canMove: 1
 --- !u!114 &6674792100831573597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1377,6 +1370,28 @@ MonoBehaviour:
   m_heightAdjustmentSpeed: 10
   m_footOffset: 3
   m_orientateBody: 1
+--- !u!114 &1492777288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2979461286406143491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f588a21349ceb6a4baa88c5e8b07342a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_turnSpeed: 60
+  m_moveSpeed: 2
+  m_turnAcceleration: 5
+  m_moveAcceleration: 0.5
+  m_minimumDistanceToTarget: 3
+  m_maxDistToTarget: 5.5
+  m_maxAngleToTarget: 10
+  m_ownerHead: {fileID: 0}
+  m_hasStick: 0
+  m_canMove: 1
 --- !u!1 &2984524675113467499
 GameObject:
   m_ObjectHideFlags: 0

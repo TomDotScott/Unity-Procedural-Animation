@@ -25,6 +25,7 @@ public class QuadrupedController : MonoBehaviour
     [SerializeField] private Stepper m_backLeftStepper;
     [SerializeField] private Stepper m_backRightStepper;
 
+
     private void Awake()
     {
         StartCoroutine(UpdateLegMovement());

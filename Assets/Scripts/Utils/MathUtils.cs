@@ -28,4 +28,14 @@ class MathUtils
         return major + minor <= 1f;
     }
 
+    public static bool IsValueAlmostZero(float value)
+    {
+        return value is < 0.0001f and > -0.0001f;
+    }
+
+    public static void SetValueToAlmostZero(ref float value)
+    {
+        value = 0.0001f;
+    }
+
 }

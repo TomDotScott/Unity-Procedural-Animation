@@ -8,7 +8,8 @@ public class DogController : MonoBehaviour
     [SerializeField] float m_moveSpeed;
     [SerializeField] float m_turnAcceleration;
     [SerializeField] float m_moveAcceleration;
-    [SerializeField] float m_minimumDistanceToTarget;
+    [SerializeField] float m_minimumDistanceToPlayer;
+    [SerializeField] float m_minimumDistanceToStick;
     [SerializeField] float m_maxDistToTarget;
     [SerializeField] float m_maxAngleToTarget;
 
@@ -17,16 +18,20 @@ public class DogController : MonoBehaviour
 
     private QuadrupedController m_quadrupedController;
 
-    [SerializeField] private Transform m_ownerHead;
+    [SerializeField] private PlayerController m_owner;
     private Transform m_currentTarget;
 
-    [SerializeField] private bool m_hasStick;
+    private bool m_hasStick;
     [SerializeField] private bool m_canMove = true;
+    [SerializeField] private Transform m_stickHoldPoint;
+
+    private GameObject m_stickGameObject;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        m_currentTarget = m_owner.transform;
+        m_quadrupedController = GetComponent<QuadrupedController>();
     }
 
     // Update is called once per frame
@@ -34,10 +39,8 @@ public class DogController : MonoBehaviour
     {
         if (m_hasStick)
         {
-            return;
+            m_stickGameObject.transform.SetPositionAndRotation(m_stickHoldPoint.position, m_stickHoldPoint.rotation);
         }
-
-        m_currentTarget = m_ownerHead;
     }
 
     private void LateUpdate()
@@ -48,6 +51,12 @@ public class DogController : MonoBehaviour
         }
 
         UpdateMotion();
+    }
+
+    public void SetTarget(Transform eyeTarget)
+    {
+        m_currentTarget = eyeTarget;
+        m_quadrupedController.SetEyeTarget(m_currentTarget);
     }
 
     void UpdateMotion()
@@ -97,14 +106,23 @@ public class DogController : MonoBehaviour
             float distanceToTarget = Vector3.Distance(transform.position, m_currentTarget.position);
 
             // If we're too far away, approach the target
-            if (distanceToTarget > m_maxDistToTarget)
+            if ((!m_hasStick && distanceToTarget > m_minimumDistanceToStick) || (m_hasStick && distanceToTarget > m_maxDistToTarget))
             {
                 targetVelocity = m_moveSpeed * towardTargetProjected.normalized;
             }
+
             // If we're too close, reverse the direction and move away
-            else if (distanceToTarget < m_minimumDistanceToTarget)
+            if (distanceToTarget < m_minimumDistanceToPlayer)
             {
-                targetVelocity = m_moveSpeed * -towardTargetProjected.normalized;
+                if (m_hasStick)
+                {
+                    m_owner.HasStick = true;
+                    m_hasStick = false;
+                }
+                else if (m_owner.HasStick)
+                {
+                    targetVelocity = m_moveSpeed * -towardTargetProjected.normalized;
+                }
             }
         }
 
@@ -116,5 +134,19 @@ public class DogController : MonoBehaviour
 
         // Apply the velocity
         transform.position += m_currentVelocity * Time.deltaTime;
+    }
+
+    public void SetStick(GameObject stickGameObject)
+    {
+        stickGameObject.transform.parent = m_stickHoldPoint;
+
+        Rigidbody stick = stickGameObject.GetComponent<Rigidbody>();
+        stick.useGravity = false;
+        stick.velocity = Vector3.zero;
+
+        m_currentTarget = m_owner.transform;
+        m_hasStick = true;
+
+        m_stickGameObject = stickGameObject;
     }
 }
